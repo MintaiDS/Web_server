@@ -1,0 +1,58 @@
+Сервис для создания и участия в голосованиях
+Позволяет создать новое голосование и получить ссылку на него(для рассылки участникам) и на его результаты.
+Позволяет проголосовать и увидеть результаты голосования.
+Сервис будет стараться соответствовать REST-архитектуре.
+
+1) создать новое голосование
+POST /polls
+content-type application/json
+{
+    "Title" : "",
+    "Options" : [ "", "", ... ]
+}
+Response:
+200 OK
+content-type application/json
+{
+    "links" : [
+        "/polls/pollID", - ссылка на голосование 
+        "/polls/results/pollID" - ссылка на результаты голосования
+    }
+}
+
+2) получить определенное голосование
+GET /polls/pollID
+Response:
+(если реализовать систему авторизации, и данный пользователь уже проголосовал)
+303 See Other
+Location: /polls/results/pollID
+(В противном случае)
+200 OK
+content-type text/html
+В теле ответа передаем html-страницу с формой для голосования.
+Форма по завершении делает POST-запрос: 3)
+3) проголосовать
+POST /polls/pollID
+content-type application/json
+{
+    "Options" : [ "", "", ...] - пункт(ы), за которые проголосовал пользователь
+}
+Response:
+302
+Location: /polls/results/pollID
+
+4) посмотреть результаты
+GET /polls/results/pollID
+Response:
+200 OK
+content-type application/json
+{
+    "Title" : "",
+    "Results" : [
+    {
+        "Text" : "",
+        "Value" : "",
+    }
+    ...
+}
+    
