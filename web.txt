@@ -11,48 +11,71 @@ content-type application/json
     "Options" : [ "", "", ... ]
 }
 Response:
-200 OK
-content-type application/json
+201 Created
+Location: /polls/pollID
+content-type application/vnd.siren+json
 {
-    "links" : [
-        "/polls/pollID", - ссылка на голосование 
-        "/polls/results/pollID" - ссылка на результаты голосования
+    "class": [ "" ]
+    {
+        "links" : [
+            { "rel": [ "self" ], "href": "/polls/pollID" },
+            { "rel": [ "related" ], "href": "/polls/pollID/results" }
+        }
     }
 }
 
 2) получить определенное голосование
 GET /polls/pollID
 Response:
-(если реализовать систему авторизации, и данный пользователь уже проголосовал)
-303 See Other
-Location: /polls/results/pollID
-(В противном случае)
 200 OK
-content-type text/html
-В теле ответа передаем html-страницу с формой для голосования.
-Форма по завершении делает POST-запрос: 3)
-3) проголосовать
-POST /polls/pollID
-content-type application/json
-{
-    "Options" : [ "", "", ...] - пункт(ы), за которые проголосовал пользователь
-}
+content-type application/vnd.siren+json
+Если пользователь не прогосовал, в json-ответе будет поле
+"actions": [
+    {
+      "name": "vote",
+      "title": "poll text",
+      "method": "POST",
+      "href": "/polls/pollID/results",
+      "type": "application/x-www-form-urlencoded",
+      "fields": [
+        { "name": optionID, "type": "radio", "title": "" },
+        { "name": optionID, "type": "radio", "title": "" },
+        ...
+        { "name": optionID, "type": "radio", "title": "" }
+      ]
+    }
+  ],
+иначе
+   "properties" : 
+   { текст голосования и результаты}
+   
+3) проголосовать (через "vote" action)
 Response:
-302
-Location: /polls/results/pollID
+200 OK
+content-type application/vnd.siren+json
+{
+    "class": ["poll"],
+    "links" : [
+        { "rel": [ "self" ], "href": "/polls/pollID/results" }
+    ]
+}
+    
 
 4) посмотреть результаты
-GET /polls/results/pollID
+GET /polls/pollID/results
 Response:
 200 OK
-content-type application/json
+content-type application/vnd.siren+json
 {
-    "Title" : "",
-    "Results" : [
-    {
-        "Text" : "",
-        "Value" : "",
-    }
-    ...
+    "class": ["poll"],
+    "properties":
+    { текст голосования и результаты}
+    "links" : [
+        { "rel": [ "self" ], "href": "/polls/pollID/results" }
+    ]
 }
+
+Возможно, вместо передачи вариантов ответа в properties сделаю список вариантов отдельным гипермедиа (polls/pollID/options)
+и вынесу список вариантов в отдельную sub-entity.
+
     
