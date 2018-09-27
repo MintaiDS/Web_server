@@ -47,7 +47,10 @@ content-type application/vnd.siren+json
   ],
 иначе
    "properties" : 
-   { текст голосования и результаты}
+   { текст голосования и результаты},
+   "links" : [
+        { "rel": [ "self" ], "href": "/polls/pollID/results" }
+    ]
    
 3) проголосовать (через "vote" action)
 Response:
