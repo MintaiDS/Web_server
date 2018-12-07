@@ -3,7 +3,7 @@
 Позволяет проголосовать и увидеть результаты голосования.
 Сервис будет стараться соответствовать REST-архитектуре.
 
-1) создать новое голосование
+1) создать новое голосование - (не реализовано по согласованию, работа с предзаполненной базой)
 POST /polls
 content-type application/json
 {
@@ -36,13 +36,8 @@ content-type application/vnd.siren+json
       "title": "poll text",
       "method": "POST",
       "href": "/polls/pollID/results",
-      "type": "application/x-www-form-urlencoded",
-      "fields": [
-        { "name": optionID, "type": "radio", "title": "" },
-        { "name": optionID, "type": "radio", "title": "" },
-        ...
-        { "name": optionID, "type": "radio", "title": "" }
-      ]
+      "type": "vnd.siren+json",
+      {}
     }
   ],
 иначе
@@ -78,7 +73,5 @@ content-type application/vnd.siren+json
     ]
 }
 
-Возможно, вместо передачи вариантов ответа в properties сделаю список вариантов отдельным гипермедиа (polls/pollID/options)
-и вынесу список вариантов в отдельную sub-entity.
 
     
