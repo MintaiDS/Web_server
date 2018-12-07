@@ -1,0 +1,4 @@
+debug:
+	g++ --std=c++11 lib/util.cpp lib/manager.cpp lib/storage.cpp HelloServer.cpp -fPIC -lfastcgi-daemon2 -shared -o libHelloServer.so -I/usr/local/include/mongocxx/v_noabi -I/usr/local/include/libmongoc-1.0 -I/usr/local/include/bsoncxx/v_noabi -I/usr/local/include/libbson-1.0 -L/usr/locallib -lmongocxx -lbsoncxx -lpthread
+release:
+	g++ -O2 --std=c++11 lib/util.cpp lib/manager.cpp lib/storage.cpp HelloServer.cpp -fPIC -lfastcgi-daemon2 -shared -o libHelloServer.so -I/usr/local/include/mongocxx/v_noabi -I/usr/local/include/libmongoc-1.0 -I/usr/local/include/bsoncxx/v_noabi -I/usr/local/include/libbson-1.0 -L/usr/locallib -lmongocxx -lbsoncxx -lpthread
